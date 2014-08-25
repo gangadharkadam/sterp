@@ -129,6 +129,11 @@ def get_data():
 					"name": "Address",
 					"description": _("Address master.")
 				},
+				{
+					"type": "doctype",
+					"name": "Admin Details",
+					"description": _("Address master.")
+				},
 			]
 		},
 	]

@@ -74,8 +74,8 @@ class SalesOrder(SellingController):
 		super(SalesOrder, self).validate_order_type()
 
 	def validate_delivery_date(self):
-		if self.order_type == 'Sales' and not self.delivery_date:
-			frappe.throw(_("Please enter 'Expected Delivery Date'"))
+		# if self.order_type == 'Sales' and not self.delivery_date:
+		# frappe.throw(_("Please enter 'Expected Delivery Date'"))
 
 		self.validate_sales_mntc_quotation()
 
@@ -88,6 +88,7 @@ class SalesOrder(SellingController):
 				frappe.throw(_("Customer {0} does not belong to project {1}").format(self.customer, self.project_name))
 
 	def validate(self):
+		frappe.errprint("in the validate of sales order")
 		super(SalesOrder, self).validate()
 
 		self.validate_order_type()
@@ -279,6 +280,30 @@ class SalesOrder(SellingController):
 
 	def get_portal_page(self):
 		return "order" if self.docstatus==1 else None
+
+	# def on_submit(self):
+
+	# 	"""send mail with sales details"""
+
+	# 	from frappe.utils.user import get_user_fullname
+	# 	# from frappe.utils import get_url
+	# 	# mail_titles = frappe.get_hooks().get("login_mail_title", [])
+	# 	title = frappe.db.get_default('company') or (mail_titles and mail_titles[0]) or ""
+
+	# 	full_name = get_user_fullname(frappe.session['user'])
+	# 	if full_name == "Guest":
+	# 		full_name = "Administrator"
+
+	# 	message = frappe.db.sql_list("""select message from `tabTemplate Types`
+	# 	where event_type='Sales Order Submit'""")
+	# 	frappe.errprint(message[0])
+	# 	# frappe.errprint(message[0].format(self.first_name or self.last_name or "user",link,self.name,full_name))
+
+	# 	sender = frappe.session.user not in STANDARD_USERS and frappe.session.user or None
+	# 	frappe.sendmail(recipients=self.email, sender=sender, subject=subject,
+	# 		message=message[0].format(self.first_name or self.last_name or "user",link,self.name))
+
+	# 	frappe.throw(_("""Approval Status must be 'Approved' or 'Rejected'"""))		
 
 
 @frappe.whitelist()

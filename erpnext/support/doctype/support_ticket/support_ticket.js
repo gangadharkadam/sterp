@@ -78,7 +78,7 @@ $.extend(cur_frm.cscript, {
 })
 
 cur_frm.cscript.assign_in_future = function(){
-		//alert("in creation assign records");
+
 		frappe.call({
 			method: "erpnext.support.doctype.support_ticket.support_ticket.assing_future",
 			args: {
@@ -93,3 +93,7 @@ cur_frm.cscript.assign_in_future = function(){
 		})	
 	
      }
+
+
+
+
