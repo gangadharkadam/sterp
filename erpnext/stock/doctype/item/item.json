@@ -825,7 +825,7 @@
  "icon": "icon-tag", 
  "idx": 1, 
  "max_attachments": 1, 
- "modified": "2014-07-03 10:45:19.574737", 
+ "modified": "2014-08-20 14:47:01.452924", 
  "modified_by": "Administrator", 
  "module": "Stock", 
  "name": "Item", 
@@ -900,6 +900,20 @@
    "permlevel": 0, 
    "read": 1, 
    "role": "Manufacturing User"
+  }, 
+  {
+   "create": 1, 
+   "delete": 1, 
+   "email": 1, 
+   "export": 1, 
+   "import": 1, 
+   "permlevel": 0, 
+   "print": 1, 
+   "read": 1, 
+   "report": 1, 
+   "role": "Super Admin", 
+   "set_user_permissions": 1, 
+   "write": 1
   }
  ], 
  "search_fields": "item_name,description,item_group,customer_code"

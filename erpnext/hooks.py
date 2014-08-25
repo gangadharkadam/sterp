@@ -52,8 +52,14 @@ doc_events = {
 		"on_cancel": "erpnext.stock.doctype.material_request.material_request.update_completed_qty"
 	},
 	"User": {
-		"validate": "erpnext.hr.doctype.employee.employee.validate_employee_role",
-		"on_update": "erpnext.hr.doctype.employee.employee.update_user_permissions"
+		"validate": [
+		"erpnext.hr.doctype.employee.employee.validate_employee_role",
+		"erpnext.hr.doctype.employee.employee.validate_validity"
+		],
+		"on_update":[ 
+		"erpnext.hr.doctype.employee.employee.update_user_permissions",
+		"erpnext.hr.doctype.employee.employee.update_users"
+		],
 	}
 }
 
@@ -61,7 +67,8 @@ scheduler_events = {
 	"all": [
 		"erpnext.support.doctype.support_ticket.get_support_mails.get_support_mails",
 		"erpnext.hr.doctype.job_applicant.get_job_applications.get_job_applications",
-		"erpnext.selling.doctype.lead.get_leads.get_leads"
+		"erpnext.selling.doctype.lead.get_leads.get_leads",
+		"erpnext.selling.doctype.lead.get_leads.assign_support"
 	],
 	"daily": [
 		"erpnext.accounts.doctype.sales_invoice.sales_invoice.manage_recurring_invoices",

@@ -29,6 +29,36 @@ cur_frm.cscript.refresh = function(doc) {
 	}
 
 	erpnext.item.toggle_reqd(cur_frm);
+	if (in_list(user_roles, 'Super Admin')) {
+		//alert("super admin logged in");	
+		cur_frm.toggle_display("inventory", false);
+		cur_frm.toggle_display("reorder_section", false);
+		cur_frm.toggle_display("purchase_details", false);
+		cur_frm.toggle_display("sales_details", false);
+		cur_frm.toggle_display("item_tax_section_break", false);
+		cur_frm.toggle_display("inspection_criteria", false);
+		cur_frm.toggle_display("manufacturing", false);
+		cur_frm.toggle_display("website_section", false);
+		cur_frm.toggle_display("brand", false);
+		cur_frm.toggle_display("barcode", false);
+		cur_frm.toggle_display("description_html", false);
+		cur_frm.toggle_display("add_image", false);
+		cur_frm.toggle_display("image", false);
+		cur_frm.toggle_display("image_view", false);
+		cur_frm.toggle_display("section_break_31", false);
+		cur_frm.toggle_display("stock_uom", false);
+		cur_frm.toggle_display("item_name", false);
+		cur_frm.toggle_display("item_group", false);
+		cur_frm.set_value("item_group", 'Products');
+		cur_frm.set_value("default_warehouse", 'Finished Goods - ind');
+		
+	}
+	else {
+		//alert("user logged in");
+		cur_frm.toggle_display("Item-validity", false);
+		cur_frm.toggle_display("Item-no_of_users", false);
+		//cur_frm.toggle_display("item_group", false);		
+	}
 }
 
 erpnext.item.toggle_reqd = function(frm) {

@@ -66,3 +66,31 @@ def auto_close_tickets():
 	frappe.db.sql("""update `tabSupport Ticket` set status = 'Closed'
 		where status = 'Replied'
 		and date_sub(curdate(),interval 15 Day) > modified""")
+
+
+@frappe.whitelist()
+def assing_future(name, assign_in_future,raised_by,assign_to):
+  	#frappe.errprint("in assign")
+  	from frappe.utils import get_url, cstr
+	if get_url()=='http://smarttailor':
+		check_entry = frappe.db.sql("""select assign_to from `tabAssing Master` where name = %s """, raised_by)
+		#frappe.errprint("in assign")
+		if check_entry :
+			#frappe.errprint("chk")
+			if assign_in_future=='No':
+				#frappe.errprint("no")
+				frappe.db.sql("""delete from `tabAssing Master` where name = %s """, raised_by)	
+			else :
+				#frappe.errprint("Yes")
+				frappe.db.sql("""update `tabAssing Master` set assign_to=%s where name = %s """,(assign_to,raised_by))
+		else :
+			#frappe.errprint("not chk")
+			if assign_in_future=='Yes':
+				#frappe.errprint("Yes")
+				am = frappe.new_doc("Assing Master")
+				am.update({
+				"name": raised_by,
+				"assign_to": assign_to,
+				"raised_by":raised_by
+				})
+				am.insert()

@@ -51,3 +51,20 @@ class SalesMailbox(POP3Mailbox):
 def get_leads():
 	if cint(frappe.db.get_value('Sales Email Settings', None, 'extract_emails')):
 		SalesMailbox()
+
+def assign_support():
+	#frappe.errprint("in assign support")
+	check_entry = frappe.db.sql("""select name,raised_by from `tabSupport Ticket` where assign_to is null and raised_by is not null and status<>'Closed'""")
+	#frappe.errprint(check_entry)
+	for name,raised_by in check_entry :
+		#frappe.errprint([name,raised_by])
+		assign_to = frappe.db.sql("""select assign_to from `tabAssing Master` where name= %s""",raised_by)
+		#frappe.errprint(assign_to[0][0])
+		if assign_to :
+			aa="update `tabSupport Ticket` set assign_to='"+cstr(assign_to[0][0])+"' where name = '"+name+"'"
+			#frappe.errprint(aa)
+			frappe.db.sql(aa)	
+		else :
+			aa="update `tabSupport Ticket` set assign_to='Administrator' where name = '"+name+"'"
+			#frappe.errprint(aa)
+			frappe.db.sql(aa)

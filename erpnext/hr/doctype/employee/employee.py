@@ -4,7 +4,7 @@
 from __future__ import unicode_literals
 import frappe
 
-from frappe.utils import getdate, validate_email_add, cint
+from frappe.utils import getdate, validate_email_add, cint,cstr
 from frappe.model.naming import make_autoname
 from frappe import throw, _, msgprint
 import frappe.permissions
@@ -213,8 +213,67 @@ def validate_employee_role(doc, method):
 			frappe.msgprint("Please set User ID field in an Employee record to set Employee Role")
 			doc.get("user_roles").remove(doc.get("user_roles", {"role": "Employee"})[0])
 
+def validate_validity(doc, method):
+	# # called via User hook
+	# #frappe.errprint(frappe.session.get('user'))
+	# frappe.errprint(doc.name)
+	# if doc.get("__islocal"):
+	# 	#frappe.errprint("is local")
+	# 	#frappe.errprint("validity")
+	#  	res = frappe.db.sql("select validity from `tabUser` where name='Administrator' and no_of_users >0")
+	#  	#frappe.errprint(res)
+	#  	if  res:
+	#  			#frappe.errprint("in res")
+	#  			#res = frappe.db.sql("select validity from `tabUser` where name='Administrator' and no_of_users > 0")
+	# 			frappe.db.sql("update `tabUser`set no_of_users=no_of_users-1  where name='Administrator'")
+	# 			#ab="update `tabUser`set validity_start_date=CURDATE(),validity_end_date=DATE_ADD(CURDATE(), INTERVAL "+cstr(res[0][0])" MONTH) where name='"+doc.name+"'"
+	# 			from frappe.utils import nowdate,add_months,cint
+	# 			doc.validity_start_date=nowdate()
+	# 			#st=cint(res[0][0])
+	# 			#frappe.errprint(res[0][0])
+	# 			frappe.errprint(add_months(nowdate(),cint(res[0][0])))
+	# 			doc.validity_end_date=add_months(nowdate(),cint(res[0][0]))
+	# 			frappe.db.sql("update `tabUser` set flag='True' where name=%s", doc.name)
+	# 			#frappe.errprint("done")
+	# 	else:
+	#  			frappe.throw(_("Your User Creation limit is expired . Please contact administrator"))
+	# called via User hook
+	from frappe.utils import get_url, cstr
+	frappe.errprint(get_url())
+	if doc.get("__islocal") and get_url()!='http://smarttailor':
+	 	res = frappe.db.sql("select validity from `tabUser` where name='Administrator' and no_of_users >0")
+	 	if  res:
+	 			frappe.db.sql("update `tabUser`set no_of_users=no_of_users-1  where name='Administrator'")
+				from frappe.utils import nowdate,add_months,cint
+				doc.validity_start_date=nowdate()
+				doc.validity_end_date=add_months(nowdate(),cint(res[0][0]))
+				frappe.db.sql("update `tabUser` set flag='True' where name=%s", doc.name)				
+				#else:
+	 			#frappe.throw(_("Your User Creation limit is expired . Please contact administrator"))
+
+
 def update_user_permissions(doc, method):
 	# called via User hook
 	if "Employee" in [d.role for d in doc.get("user_roles")]:
 		employee = frappe.get_doc("Employee", {"user_id": doc.name})
 		employee.update_user_permissions()
+
+def update_users(doc, method):
+	pass
+	# #frappe.errprint("in update checkgin flag and no of balance users and updating expiriy date")
+	# flag=frappe.db.sql("select flag from `tabUser` where name=%s and flag='false'", doc.name)
+	# #frappe.errprint(flag)
+	# if flag : 
+	# 	#frappe.errprint("users")
+	# 	res = frappe.db.sql("select validity from `tabUser` where name='Administrator' and no_of_users > 0")
+	# 	#frappe.errprint(res)
+	# 	# called via User hook
+	# 	frappe.db.sql("update `tabUser`set no_of_users=no_of_users-1  where name='Administrator'")
+	# 	ab="update `tabUser`set validity_start_date=CURDATE(),validity_end_date=DATE_ADD(CURDATE(), INTERVAL "+cstr(res[0][0])
+	# 	b=" MONTH) where name='"+doc.name+"'"
+	# 	#frappe.errprint(ab)
+	# 	#frappe.errprint(b)
+	# 	c=ab+b
+	# 	#frappe.errprint(c)
+	# 	#frappe.db.sql(c)
+	# 	frappe.db.sql("update `tabUser` set flag='True' where name=%s", doc.name)

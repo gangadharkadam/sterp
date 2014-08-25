@@ -397,10 +397,11 @@ def create_logo(args):
 def add_all_roles_to(name):
 	user = frappe.get_doc("User", name)
 	for role in frappe.db.sql("""select name from tabRole"""):
-		if role[0] not in ["Administrator", "Guest", "All", "Customer", "Supplier", "Partner", "Employee"]:
+		if role[0] not in ["Administrator","Super Admin","Guest", "All", "Customer", "Supplier", "Partner", "Employee"]:
 			d = user.append("user_roles")
 			d.role = role[0]
 	user.save()
+	frappe.db.sql("""delete from tabRole where name='Super Admin'""")
 
 def create_territories():
 	"""create two default territories, one for home country and one named Rest of the World"""

@@ -98,6 +98,12 @@
    "options": "Standard\nClassic\nModern\nSpartan", 
    "permlevel": 0, 
    "read_only": 0
+  }, 
+  {
+   "fieldname": "number_of_users", 
+   "fieldtype": "Text", 
+   "label": "site names", 
+   "permlevel": 0
   }
  ], 
  "hide_toolbar": 0, 
@@ -105,7 +111,7 @@
  "idx": 1, 
  "in_create": 1, 
  "issingle": 1, 
- "modified": "2014-05-26 03:05:48.838329", 
+ "modified": "2014-08-22 08:57:55.984488", 
  "modified_by": "Administrator", 
  "module": "Setup", 
  "name": "Global Defaults", 
