@@ -252,9 +252,9 @@ class SalesOrder(SellingController):
 		import requests
 		import json
 		pr = frappe.db.sql_list("""select item_code from `tabSales Order Item` where parent = %s limit 1""", self.name)
-		frappe.errprint(pr[0])
+		#frappe.errprint(pr[0])
 		qr="select no_of_users from `tabItem` where name = '"+pr[0]+"'"
-		frappe.errprint(qr)
+		#frappe.errprint(qr)
 		pro = frappe.db.sql_list(qr)
 		qr1="select validity from `tabItem` where name = '"+pr[0]+"'"
 		pro1 = frappe.db.sql_list(qr1)
@@ -266,6 +266,11 @@ class SalesOrder(SellingController):
 		response = requests.get(url, data=sup, headers=headers)
 		#frappe.errprint(response.text)
 		#frappe.errprint(json.dumps(sup))
+
+		#url='http://'+self.customer+'/api/resource/User/?fields=["name", "validity","no_of_users"]'
+		#response = requests.get(url)
+		#frappe.errprint(response.text)
+
 		support_ticket={}
 		support_ticket['validity']=pro1[0]
 		support_ticket['no_of_users']=pro[0]
