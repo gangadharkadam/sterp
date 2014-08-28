@@ -19,6 +19,7 @@
   {
    "fieldname": "fiscal_year", 
    "fieldtype": "Link", 
+   "hidden": 1, 
    "in_filter": 1, 
    "in_list_view": 1, 
    "label": "Fiscal Year", 
@@ -40,7 +41,7 @@
  ], 
  "icon": "icon-bar-chart", 
  "idx": 1, 
- "modified": "2014-05-09 02:16:47.567367", 
+ "modified": "2014-08-28 10:51:05.086508", 
  "modified_by": "Administrator", 
  "module": "Accounts", 
  "name": "Budget Distribution", 

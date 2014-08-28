@@ -18,6 +18,15 @@
    "search_index": 1
   }, 
   {
+   "fieldname": "target_distribution", 
+   "fieldtype": "Link", 
+   "in_list_view": 1, 
+   "label": "Target Distribution", 
+   "options": "Budget Distribution", 
+   "permlevel": 0, 
+   "reqd": 1
+  }, 
+  {
    "fieldname": "fiscal_year", 
    "fieldtype": "Link", 
    "in_filter": 1, 
@@ -54,7 +63,7 @@
  ], 
  "idx": 1, 
  "istable": 1, 
- "modified": "2014-05-09 02:16:41.436257", 
+ "modified": "2014-08-28 10:49:53.048080", 
  "modified_by": "Administrator", 
  "module": "Setup", 
  "name": "Target Detail", 
