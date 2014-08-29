@@ -46,6 +46,11 @@ def get_data():
 					"name": "Item",
 					"description": _("All Products or Services."),
 				},
+				{
+					"type": "doctype",
+					"name": "Site Master",
+					"description": _("Customer Site Master."),
+				},
 			]
 		},
 		{

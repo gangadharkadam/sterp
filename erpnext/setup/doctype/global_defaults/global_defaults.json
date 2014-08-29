@@ -101,9 +101,11 @@
   }, 
   {
    "fieldname": "number_of_users", 
-   "fieldtype": "Text", 
-   "label": "site names", 
-   "permlevel": 0
+   "fieldtype": "Data", 
+   "hidden": 1, 
+   "label": "Master URL", 
+   "permlevel": 0, 
+   "reqd": 0
   }
  ], 
  "hide_toolbar": 0, 
@@ -111,7 +113,7 @@
  "idx": 1, 
  "in_create": 1, 
  "issingle": 1, 
- "modified": "2014-08-22 08:57:55.984488", 
+ "modified": "2014-08-29 10:57:17.516558", 
  "modified_by": "Administrator", 
  "module": "Setup", 
  "name": "Global Defaults", 

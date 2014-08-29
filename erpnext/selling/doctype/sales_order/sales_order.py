@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import frappe
 import frappe.utils
 import json
-from frappe.utils import cstr, flt, getdate, comma_and
+from frappe.utils import cstr, cint,flt, getdate, comma_and
 from frappe import _
 from frappe.model.mapper import get_mapped_doc
 from erpnext.controllers.selling_controller import SellingController
@@ -156,6 +156,11 @@ class SalesOrder(SellingController):
 
 		self.update_prevdoc_status('submit')
 		frappe.db.set(self, 'status', 'Submitted')
+		#frappe.errprint("calling superadmin")
+        from frappe.utils import get_url, cstr
+		#frappe.errprint(get_url())
+		if get_url()=='http://smarttailor':
+			self.superadmin()
 		
 
 	def on_cancel(self):
@@ -240,47 +245,57 @@ class SalesOrder(SellingController):
 				update_bin(args)
 
 	def on_update(self):
-        	frappe.errprint("calling superadmin")
-        	from frappe.utils import get_url, cstr
-		frappe.errprint(get_url())
-		if get_url()=='http://smarttailor':
-			self.superadmin()
+		pass
 			
-
 
 	def superadmin(self):
 		import requests
 		import json
-		pr = frappe.db.sql_list("""select item_code from `tabSales Order Item` where parent = %s limit 1""", self.name)
-		#frappe.errprint(pr[0])
-		qr="select no_of_users from `tabItem` where name = '"+pr[0]+"'"
-		#frappe.errprint(qr)
-		pro = frappe.db.sql_list(qr)
-		qr1="select validity from `tabItem` where name = '"+pr[0]+"'"
-		pro1 = frappe.db.sql_list(qr1)
-		#frappe.errprint(pro[0])
-		#frappe.errprint(pro[0])
+		pr1 = frappe.db.sql("""select site_name,email_id__if_administrator,country from `tabSite Master` where client_name=%s""",self.customer)
+		st=pr1 and pr1[0][0] or ''
+		eml=pr1 and pr1[0][1] or ''
+		cnt=pr1 and pr1[0][2] or ''
+		val=usr=0
+		frappe.errprint(val)
+		item_code = frappe.db.sql("""select item_code from `tabSales Order Item` where parent = %s """, self.name)
+		for ic in item_code:
+			qr="select no_of_users from `tabItem` where name = '"+cstr(ic[0])+"'"
+			pro = frappe.db.sql_list(qr)
+			if pro:
+				usr+=pro[0]
+			qr1="select validity from `tabItem` where name = '"+cstr(ic[0])+"'"
+			pro1 = frappe.db.sql_list(qr1)
+			if pro1:
+				val+=pro1[0]
 		headers = {'content-type': 'application/x-www-form-urlencoded'}
 		sup={'usr':'administrator','pwd':'admin'}
-		url = 'http://'+self.customer+'/api/method/login'
+		url = 'http://'+st+'/api/method/login'
+		qr2="select validity,no_of_users from "+st+".`tabUser` where name='Administrator'"
+		res2 = frappe.db.sql(qr2)
+		if res2 and res2[0]:
+			val+=cint(res2[0][0])
+		if res2 and res2[0][1]:
+			usr+=cint(res2[0][1])
 		response = requests.get(url, data=sup, headers=headers)
-		#frappe.errprint(response.text)
-		#frappe.errprint(json.dumps(sup))
-
-		#url='http://'+self.customer+'/api/resource/User/?fields=["name", "validity","no_of_users"]'
-		#response = requests.get(url)
-		#frappe.errprint(response.text)
-
 		support_ticket={}
-		support_ticket['validity']=pro1[0]
-		support_ticket['no_of_users']=pro[0]
-		url = 'http://'+self.customer+'/api/resource/User/Administrator'
-		#frappe.errprint('data='+json.dumps(support_ticket))
+		support_ticket['validity']=val
+		support_ticket['no_of_users']=usr
+		support_ticket['country']=cnt
+		support_ticket['email_id_admin']=eml
+		url = 'http://'+st+'/api/resource/User/Administrator'
+		#frappe.errprint(url)
 		response = requests.put(url, data='data='+json.dumps(support_ticket), headers=headers)
-		#frappe.errprint(response)
 		#frappe.errprint(response.text)
 		if pro1>0:
-			frappe.db.sql("update `tabSite Master`set expiry_date=DATE_ADD(CURDATE(), INTERVAL "+cstr(pro1[0])+" MONTH) where name='"+self.customer+"'")
+			rss=frappe.db.sql("select expiry_date from `tabSite Master` where expiry_date is not null and client_name='"+self.customer+"'")
+			#frappe.errprint(rss)
+			if rss:
+				#frappe.errprint("update `tabSite Master`set expiry_date=DATE_ADD(expiry_date, INTERVAL "+cstr(val)+" MONTH) where client_name='"+self.customer+"'")
+				frappe.db.sql("update `tabSite Master`set expiry_date=DATE_ADD(expiry_date, INTERVAL "+cstr(val)+" MONTH) where client_name='"+self.customer+"'")
+			else:
+				#frappe.errprint("else")
+				frappe.db.sql("update `tabSite Master`set expiry_date=DATE_ADD(CURDATE(), INTERVAL "+cstr(val)+" MONTH) where client_name='"+self.customer+"'")   	
+		frappe.errprint("done")				
 
 
 	def get_portal_page(self):

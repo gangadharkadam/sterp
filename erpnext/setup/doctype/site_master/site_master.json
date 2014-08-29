@@ -70,6 +70,14 @@
    "permlevel": 0
   }, 
   {
+   "fieldname": "country", 
+   "fieldtype": "Link", 
+   "label": "Country", 
+   "options": "Country", 
+   "permlevel": 0, 
+   "reqd": 1
+  }, 
+  {
    "fieldname": "url", 
    "fieldtype": "Data", 
    "hidden": 0, 
@@ -97,12 +105,13 @@
  ], 
  "hide_heading": 0, 
  "hide_toolbar": 0, 
+ "icon": "icon-fighter-jet", 
  "in_create": 0, 
  "in_dialog": 0, 
  "is_submittable": 0, 
  "issingle": 0, 
  "istable": 0, 
- "modified": "2014-08-25 16:21:09.871506", 
+ "modified": "2014-08-29 11:30:24.390298", 
  "modified_by": "Administrator", 
  "module": "Setup", 
  "name": "Site Master", 
