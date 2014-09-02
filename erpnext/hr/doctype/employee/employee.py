@@ -215,7 +215,7 @@ def validate_employee_role(doc, method):
 
 def validate_validity(doc, method):
 	from frappe.utils import get_url, cstr
-	frappe.errprint(get_url())
+	#frappe.errprint(get_url())
 	if doc.get("__islocal") and get_url()!='http://smarttailor':
 	 	res = frappe.db.sql("select validity from `tabUser` where name='Administrator' and no_of_users >0")
 	 	if  res:
@@ -223,9 +223,19 @@ def validate_validity(doc, method):
 				from frappe.utils import nowdate,add_months,cint
 				doc.validity_start_date=nowdate()
 				doc.validity_end_date=add_months(nowdate(),cint(res[0][0]))
-				frappe.db.sql("update `tabUser` set flag='True' where name=%s", doc.name)				
+				#frappe.db.sql("update `tabUser` set flag='True' where name=%s", doc.name)				
 		else:
-	 			frappe.throw(_("Your User Creation limit is expired . Please contact administrator"))
+			res1 = frappe.db.sql("select count(name) from `tabUser`")
+			#frappe.errprint(res1)
+	 		if res1 and res1[0][0]==2:
+	 			#frappe.errprint("else if")
+	 			#frappe.db.sql("update `tabUser`set no_of_users=no_of_users-1  where name='Administrator'")
+				from frappe.utils import nowdate,add_months,cint
+				doc.validity_start_date=nowdate()
+				doc.validity_end_date=add_months(nowdate(),1)
+				#frappe.db.sql("update `tabUser` set flag='True' where name=%s", doc.name)
+			else:	
+	 			frappe.throw(_("Your User Creation limit is exceeded . Please contact administrator"))
 
 
 def update_user_permissions(doc, method):
@@ -235,8 +245,141 @@ def update_user_permissions(doc, method):
 		employee.update_user_permissions()
 
 def update_users(doc, method):
+	frappe.errprint("reassigning supprot ticket to admin for disables users")
 	if not doc.enabled :
-		abc=frappe.db.sql("""select name from `tabUser` where name=%s and enabled=1""", doc.name)
+		frappe.errprint(doc.name)
+		abc=frappe.db.sql("""select name from `tabUser` where name=%s and enabled=0""", doc.name)
+		frappe.errprint(abc)
 		if abc:
 			frappe.db.sql("""update `tabSupport Ticket` set assign_to='Administrator' where assign_to=%s""",doc.name)
+			frappe.errprint("updated")
 
+def create_support():
+	import requests
+	import json
+	pr2 = frappe.db.sql("""select site_name from `tabSubAdmin Info` """)
+	frappe.errprint(pr2)
+	frappe.errprint("is feed back saved")
+	for site_name in pr2:
+		frappe.errprint(site_name)
+		db_name=cstr(site_name[0]).split('.')[0]
+		frappe.errprint(site_name)
+		abx="select name from `"+cstr(db_name)+"`.`tabSupport Ticket` where flag='false'"
+		frappe.errprint(abx)
+		pr3 = frappe.db.sql(abx)
+		for sn in pr3:
+				frappe.errprint("in cuppoer ticke")
+		 		login_details = {'usr': 'Administrator', 'pwd': 'admin'}
+		 		url = 'http://smarttailor/api/method/login'
+		 		headers = {'content-type': 'application/x-www-form-urlencoded'}
+		 		frappe.errprint([url, 'data='+json.dumps(login_details)])
+		 		response = requests.post(url, data='data='+json.dumps(login_details), headers=headers)
+		 		frappe.errprint("in if for creation support ticket")
+		 		test = {}
+		 		url="http://"+cstr(site_name[0])+"/api/resource/Support Ticket/"+cstr(sn[0])
+		 		frappe.errprint(url)
+		 		response = requests.get(url)
+		 		frappe.errprint(response.text)
+				support_ticket = eval(response.text).get('data')
+				del support_ticket['name']
+				del support_ticket['creation']
+				del support_ticket['modified']
+				del support_ticket['company']
+				frappe.errprint("support_ticket")
+				frappe.errprint(support_ticket)
+				url = 'http://smarttailor/api/resource/Support Ticket'
+				headers = {'content-type': 'application/x-www-form-urlencoded'}
+				frappe.errprint('data='+json.dumps(support_ticket))
+				response = requests.post(url, data='data='+json.dumps(support_ticket), headers=headers)
+				frappe.errprint(response)
+				frappe.errprint(response.text)
+				url="http://"+cstr(site_name[0])+"/api/resource/Support Ticket/"+cstr(sn[0])
+				support_ticket={}
+				support_ticket['flag']='True'
+				# url = 'http://'+st+'/api/resource/User/Administrator'
+				frappe.errprint(url)
+				frappe.errprint('data='+json.dumps(support_ticket))
+				response = requests.put(url, data='data='+json.dumps(support_ticket), headers=headers)
+				frappe.errprint("responce")
+				frappe.errprint(response.text)
+
+
+def create_feedback():
+	frappe.errprint("in feed bak creation")
+	import requests
+	import json
+	pr2 = frappe.db.sql("""select site_name from `tabSubAdmin Info`""")
+	frappe.errprint(pr2)
+	frappe.errprint("is feed back saved")
+	for site_name in pr2:
+		frappe.errprint(site_name)
+		db_name=cstr(site_name[0]).split('.')[0]
+		frappe.errprint(site_name)
+		abx="select name from `"+cstr(db_name)+"`.`tabFeed Back` where flag='false'"
+		frappe.errprint(abx)
+		pr3 = frappe.db.sql(abx)
+		for sn in pr3:
+				frappe.errprint("in feed back")
+		 		login_details = {'usr': 'Administrator', 'pwd': 'admin'}
+		 		url = 'http://smarttailor/api/method/login'
+		 		headers = {'content-type': 'application/x-www-form-urlencoded'}
+		 		frappe.errprint([url, 'data='+json.dumps(login_details)])
+		 		response = requests.post(url, data='data='+json.dumps(login_details), headers=headers)
+		 		frappe.errprint("in if for creation feed Back")
+		 		test = {}
+		 		url="http://"+cstr(site_name[0])+"/api/resource/Feed Back/"+cstr(sn[0])
+		 		frappe.errprint(url)
+		 		response = requests.get(url)
+		 		frappe.errprint(response.text)
+				support_ticket = eval(response.text).get('data')
+				del support_ticket['name']
+				del support_ticket['creation']
+				del support_ticket['modified']
+				#del support_ticket['company']
+				frappe.errprint("Feed Back")
+				frappe.errprint(support_ticket)
+				url = 'http://smarttailor/api/resource/Feed Back'
+				headers = {'content-type': 'application/x-www-form-urlencoded'}
+				frappe.errprint('data='+json.dumps(support_ticket))
+				response = requests.post(url, data='data='+json.dumps(support_ticket), headers=headers)
+				frappe.errprint(response)
+				frappe.errprint(response.text)
+				url="http://"+cstr(site_name[0])+"/api/resource/Feed Back/"+cstr(sn[0])
+				support_ticket={}
+				support_ticket['flag']='True'
+				# url = 'http://'+st+'/api/resource/User/Administrator'
+				frappe.errprint(url)
+				frappe.errprint('data='+json.dumps(support_ticket))
+				response = requests.put(url, data='data='+json.dumps(support_ticket), headers=headers)
+				frappe.errprint("responce")
+				frappe.errprint(response.text)
+
+def disable_user():
+	frappe.errprint("in feed bak creation")
+	import requests
+	import json
+	pr2 = frappe.db.sql("""select site_name from `tabSubAdmin Info`""")
+	frappe.errprint(pr2)
+	frappe.errprint("is feed back saved")
+	for site_name in pr2:
+		frappe.errprint(site_name)
+		db_name=cstr(site_name[0]).split('.')[0]
+		frappe.errprint(site_name)
+		abx="select name from `"+cstr(db_name)+"`.`tabUser` where validity_end_date=CURDATE()"
+		frappe.errprint(abx)
+		pr3 = frappe.db.sql(abx)
+		for sn in pr3:
+				frappe.errprint("in disable user back")
+				headers = {'content-type': 'application/x-www-form-urlencoded'}
+				sup={'usr':'administrator','pwd':'admin'}
+				url = 'http://'+cstr(site_name[0])+'/api/method/login'
+				response = requests.get(url, data=sup, headers=headers)
+				frappe.errprint(response.text)
+		 		url="http://"+cstr(site_name[0])+"/api/resource/User/"+cstr(sn[0])
+		 		support_ticket={}
+				support_ticket['enabled']=0
+		 		frappe.errprint(url)
+		 		frappe.errprint('data='+json.dumps(support_ticket))
+				response = requests.put(url, data='data='+json.dumps(support_ticket), headers=headers)
+				frappe.errprint("responce")
+				frappe.errprint(response.text)

@@ -41,6 +41,16 @@ def get_data():
 					"name": "Serial No",
 					"description": _("Single unit of an Item."),
 				},
+				{
+					"type": "doctype",
+					"name": "Email Template",
+					"description": _("Send Notification to Customers."),
+				},
+				{
+					"type": "doctype",
+					"name": "Feed Back",
+					"description": _("Give Feed Back of System."),
+				},
 			]
 		},
 		{

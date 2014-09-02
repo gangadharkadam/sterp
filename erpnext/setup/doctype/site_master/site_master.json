@@ -31,6 +31,7 @@
   }, 
   {
    "allow_on_submit": 0, 
+   "description": "Please use only AlphaNumeric site name (tailorpad) special characters are not allowed (.  ,  _ - @ # etc) .", 
    "fieldname": "site_name", 
    "fieldtype": "Data", 
    "hidden": 0, 
@@ -52,9 +53,10 @@
    "fieldname": "expiry_date", 
    "fieldtype": "Date", 
    "hidden": 0, 
+   "in_list_view": 1, 
    "label": "Validity of User", 
    "permlevel": 0, 
-   "read_only": 0, 
+   "read_only": 1, 
    "reqd": 0
   }, 
   {
@@ -80,7 +82,7 @@
   {
    "fieldname": "url", 
    "fieldtype": "Data", 
-   "hidden": 0, 
+   "hidden": 1, 
    "label": "url", 
    "permlevel": 0
   }, 
@@ -111,7 +113,7 @@
  "is_submittable": 0, 
  "issingle": 0, 
  "istable": 0, 
- "modified": "2014-08-29 11:30:24.390298", 
+ "modified": "2014-09-02 08:22:26.177057", 
  "modified_by": "Administrator", 
  "module": "Setup", 
  "name": "Site Master", 
@@ -130,7 +132,7 @@
    "permlevel": 0, 
    "print": 0, 
    "read": 1, 
-   "report": 0, 
+   "report": 1, 
    "role": "Super Admin", 
    "set_user_permissions": 0, 
    "submit": 0, 

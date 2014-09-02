@@ -401,7 +401,7 @@ def add_all_roles_to(name):
 			d = user.append("user_roles")
 			d.role = role[0]
 	user.save()
-	frappe.db.sql("""delete from tabRole where name='Super Admin'""")
+	#frappe.db.sql("""delete from tabRole where name='Super Admin'""")
 
 def create_territories():
 	"""create two default territories, one for home country and one named Rest of the World"""

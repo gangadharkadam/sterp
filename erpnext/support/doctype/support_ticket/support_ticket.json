@@ -247,14 +247,23 @@
    "default": "", 
    "fieldname": "assign_in_future", 
    "fieldtype": "Select", 
-   "label": "Assign In Future", 
+   "label": "Auto assign similar tickets", 
    "options": "\nNo\nYes", 
    "permlevel": 1
+  }, 
+  {
+   "default": "false", 
+   "fieldname": "flag", 
+   "fieldtype": "Data", 
+   "hidden": 1, 
+   "label": "flag", 
+   "options": "\ntrue\nfalse", 
+   "permlevel": 0
   }
  ], 
  "icon": "icon-ticket", 
  "idx": 1, 
- "modified": "2014-08-23 15:31:14.914063", 
+ "modified": "2014-09-02 11:13:47.584335", 
  "modified_by": "Administrator", 
  "module": "Support", 
  "name": "Support Ticket", 

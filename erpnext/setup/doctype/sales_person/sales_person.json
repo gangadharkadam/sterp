@@ -65,6 +65,13 @@
    "reqd": 1
   }, 
   {
+   "fieldname": "country", 
+   "fieldtype": "Link", 
+   "label": "Country", 
+   "options": "Country", 
+   "permlevel": 0
+  }, 
+  {
    "fieldname": "lft", 
    "fieldtype": "Int", 
    "hidden": 1, 
@@ -144,7 +151,7 @@
  "icon": "icon-user", 
  "idx": 1, 
  "in_create": 1, 
- "modified": "2014-08-28 10:48:54.077257", 
+ "modified": "2014-08-31 10:56:51.169367", 
  "modified_by": "Administrator", 
  "module": "Setup", 
  "name": "Sales Person", 

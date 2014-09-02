@@ -612,6 +612,14 @@
    "search_index": 1
   }, 
   {
+   "fieldname": "country", 
+   "fieldtype": "Link", 
+   "label": "Country", 
+   "options": "Country", 
+   "permlevel": 0, 
+   "reqd": 0
+  }, 
+  {
    "description": "<a href=\"#Sales Browser/Customer Group\">Add / Edit</a>", 
    "fieldname": "customer_group", 
    "fieldtype": "Link", 
@@ -889,7 +897,7 @@
  "idx": 1, 
  "is_submittable": 1, 
  "issingle": 0, 
- "modified": "2014-07-31 06:34:14.727868", 
+ "modified": "2014-08-31 10:42:31.203663", 
  "modified_by": "Administrator", 
  "module": "Selling", 
  "name": "Sales Order", 

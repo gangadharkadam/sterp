@@ -101,6 +101,13 @@
    "reqd": 1
   }, 
   {
+   "fieldname": "country", 
+   "fieldtype": "Link", 
+   "label": "Country", 
+   "options": "Country", 
+   "permlevel": 0
+  }, 
+  {
    "depends_on": "eval:!doc.__islocal", 
    "fieldname": "address_contacts", 
    "fieldtype": "Section Break", 
@@ -282,7 +289,7 @@
  ], 
  "icon": "icon-user", 
  "idx": 1, 
- "modified": "2014-05-27 03:49:09.208254", 
+ "modified": "2014-08-31 10:45:23.869345", 
  "modified_by": "Administrator", 
  "module": "Selling", 
  "name": "Customer", 

@@ -88,7 +88,7 @@ class SalesOrder(SellingController):
 				frappe.throw(_("Customer {0} does not belong to project {1}").format(self.customer, self.project_name))
 
 	def validate(self):
-		frappe.errprint("in the validate of sales order")
+		#frappe.errprint("in the validate of sales order")
 		super(SalesOrder, self).validate()
 
 		self.validate_order_type()
@@ -157,7 +157,7 @@ class SalesOrder(SellingController):
 		self.update_prevdoc_status('submit')
 		frappe.db.set(self, 'status', 'Submitted')
 		#frappe.errprint("calling superadmin")
-        from frappe.utils import get_url, cstr
+        	from frappe.utils import get_url, cstr
 		#frappe.errprint(get_url())
 		if get_url()=='http://smarttailor':
 			self.superadmin()
@@ -246,9 +246,16 @@ class SalesOrder(SellingController):
 
 	def on_update(self):
 		pass
+		# frappe.errprint("calling superadmin")
+  #       	from frappe.utils import get_url, cstr
+		# frappe.errprint(get_url())
+		# if get_url()=='http://smarttailor':
+		# 	self.superadmin()
+		
 			
 
 	def superadmin(self):
+		frappe.errprint("in super admin")
 		import requests
 		import json
 		pr1 = frappe.db.sql("""select site_name,email_id__if_administrator,country from `tabSite Master` where client_name=%s""",self.customer)
@@ -267,15 +274,25 @@ class SalesOrder(SellingController):
 			pro1 = frappe.db.sql_list(qr1)
 			if pro1:
 				val+=pro1[0]
+		frappe.errprint("1")
+		frappe.errprint(st)
 		headers = {'content-type': 'application/x-www-form-urlencoded'}
 		sup={'usr':'administrator','pwd':'admin'}
 		url = 'http://'+st+'/api/method/login'
-		qr2="select validity,no_of_users from "+st+".`tabUser` where name='Administrator'"
+		frappe.errprint(url)
+		st1=st[:16]
+		if "." in st1: 
+			dn=st1.split('.')
+			st1=dn[0]
+		qr2="select validity,no_of_users from `"+st1+"`.`tabUser` where name='Administrator'"
+		frappe.errprint(qr2)
 		res2 = frappe.db.sql(qr2)
+		frappe.errprint("2")
 		if res2 and res2[0]:
 			val+=cint(res2[0][0])
 		if res2 and res2[0][1]:
 			usr+=cint(res2[0][1])
+		frappe.errprint("3")
 		response = requests.get(url, data=sup, headers=headers)
 		support_ticket={}
 		support_ticket['validity']=val
@@ -283,17 +300,19 @@ class SalesOrder(SellingController):
 		support_ticket['country']=cnt
 		support_ticket['email_id_admin']=eml
 		url = 'http://'+st+'/api/resource/User/Administrator'
-		#frappe.errprint(url)
+		frappe.errprint(url)
+		frappe.errprint('data='+json.dumps(support_ticket))
 		response = requests.put(url, data='data='+json.dumps(support_ticket), headers=headers)
-		#frappe.errprint(response.text)
+		frappe.errprint("responce")
+		frappe.errprint(response.text)
 		if pro1>0:
 			rss=frappe.db.sql("select expiry_date from `tabSite Master` where expiry_date is not null and client_name='"+self.customer+"'")
-			#frappe.errprint(rss)
+			frappe.errprint(rss)
 			if rss:
-				#frappe.errprint("update `tabSite Master`set expiry_date=DATE_ADD(expiry_date, INTERVAL "+cstr(val)+" MONTH) where client_name='"+self.customer+"'")
+				frappe.errprint("update `tabSite Master`set expiry_date=DATE_ADD(expiry_date, INTERVAL "+cstr(val)+" MONTH) where client_name='"+self.customer+"'")
 				frappe.db.sql("update `tabSite Master`set expiry_date=DATE_ADD(expiry_date, INTERVAL "+cstr(val)+" MONTH) where client_name='"+self.customer+"'")
 			else:
-				#frappe.errprint("else")
+				frappe.errprint("else")
 				frappe.db.sql("update `tabSite Master`set expiry_date=DATE_ADD(CURDATE(), INTERVAL "+cstr(val)+" MONTH) where client_name='"+self.customer+"'")   	
 		frappe.errprint("done")				
 
