@@ -14,6 +14,23 @@ $.extend(cur_frm.cscript, {
 			cur_frm.footer.help_area.innerHTML = '<p><a href="#Form/Support Email Settings/Support Email Settings">'+__("Support Email Settings")+'</a><br>\
 				<span class="help">'+__("Integrate incoming support emails to Support Ticket")+'</span></p>';
 		}
+		var usr=''
+		if(doc.__islocal && user=='Administrator') {				
+				frappe.call({
+				method: "erpnext.support.doctype.support_ticket.support_ticket.get_admin",
+				args: {
+					name: cur_frm.doc.name				
+				},
+				callback: function(r) {
+					alert(r.message);
+					usr=r.message;
+					cur_frm.doc.raised_by=usr;
+				}
+				})		
+		}
+		else {			
+				doc.raised_by=user;
+		}
 	},
 	
 	refresh: function(doc) {

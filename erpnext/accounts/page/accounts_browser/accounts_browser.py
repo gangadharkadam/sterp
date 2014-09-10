@@ -26,7 +26,7 @@ def get_children():
 			where ifnull(parent_%s,'') = ''
 			and `company` = %s	and docstatus<2 
 			order by name""" % (ctype, ctype.lower().replace(' ','_'), '%s'),
-				company, as_dict=1)
+				company, as_dict=1, debug=1)
 	else:	
 		# other
 		acc = frappe.db.sql("""select 
@@ -35,7 +35,7 @@ def get_children():
 			where ifnull(parent_%s,'') = %s
 			and docstatus<2 
 			order by name""" % (ctype, ctype.lower().replace(' ','_'), '%s'),
-				args['parent'], as_dict=1)
+				args['parent'], as_dict=1, debug=1)
 				
 	if ctype == 'Account':
 		currency = frappe.db.sql("select default_currency from `tabCompany` where name = %s", company)[0][0]

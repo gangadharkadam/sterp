@@ -100,6 +100,13 @@
    "read_only": 0
   }, 
   {
+   "description": "Currency conversion rate (1 USD =? INR)", 
+   "fieldname": "currency_conversion_rate", 
+   "fieldtype": "Data", 
+   "label": "Currency conversion rate", 
+   "permlevel": 0
+  }, 
+  {
    "fieldname": "number_of_users", 
    "fieldtype": "Data", 
    "hidden": 1, 
@@ -113,7 +120,7 @@
  "idx": 1, 
  "in_create": 1, 
  "issingle": 1, 
- "modified": "2014-08-29 10:57:17.516558", 
+ "modified": "2014-09-09 12:30:05.480468", 
  "modified_by": "Administrator", 
  "module": "Setup", 
  "name": "Global Defaults", 

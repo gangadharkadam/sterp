@@ -9,7 +9,7 @@ app_version = __version__
 
 error_report_email = "support@erpnext.com"
 
-app_include_js = ["assets/js/erpnext.min.js","assets/js/chart.js"]
+app_include_js = ["assets/js/erpnext.min.js","assets/js/chart.js","assets/js/sitevisit.js"]
 app_include_css = "assets/css/erpnext.css"
 web_include_js = "assets/js/erpnext-web.min.js"
 
@@ -68,10 +68,11 @@ scheduler_events = {
 		"erpnext.support.doctype.support_ticket.get_support_mails.get_support_mails",
 		"erpnext.hr.doctype.job_applicant.get_job_applications.get_job_applications",
 		"erpnext.selling.doctype.lead.get_leads.get_leads",
-		"erpnext.selling.doctype.lead.get_leads.assign_support",
 		"erpnext.hr.doctype.employee.employee.create_support",
 		"erpnext.hr.doctype.employee.employee.create_feedback",
-		"erpnext.hr.doctype.employee.employee.disable_user"
+		"erpnext.selling.doctype.lead.get_leads.assign_support",
+		"erpnext.hr.doctype.employee.employee.disable_user",
+		"erpnext.hr.doctype.employee.employee.add_validity"
 	],
 	"daily": [
 		"erpnext.accounts.doctype.sales_invoice.sales_invoice.manage_recurring_invoices",

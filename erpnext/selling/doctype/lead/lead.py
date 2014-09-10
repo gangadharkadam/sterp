@@ -35,6 +35,16 @@ class Lead(SellingController):
 			if self.email_id == self.lead_owner:
 				# Lead Owner cannot be same as the Lead
 				self.lead_owner = None
+		from frappe.utils import get_url, cstr
+		if self.get("__islocal") and get_url()=='http://smarttailor':
+			frappe.errprint("creating site from lead")
+			frappe.get_doc({
+					"doctype": "Site Master",
+					"client_name": self.company_name,
+					"site_name":  self.company_name,
+					"email_id__if_administrator": self.email_id,
+					"country": self.country					
+				}).insert()
 
 	def on_update(self):
 		self.check_email_id_is_unique()

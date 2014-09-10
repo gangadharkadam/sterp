@@ -12,3 +12,24 @@ console.log("in tjhe sen js");
 		});
 
 }
+
+$.extend(cur_frm.cscript, {
+	onload: function(doc, dt, dn) {
+		var usr=''
+		if(doc.__islocal && user=='Administrator') {				
+				frappe.call({
+				method: "erpnext.support.doctype.support_ticket.support_ticket.get_admin",
+				args: {
+					name: cur_frm.doc.name				
+				},
+				callback: function(r) {
+					usr=r.message;
+					cur_frm.doc.raised_by=usr;
+				}
+				})		
+		}
+		else {			
+				doc.raised_by=user;
+		}
+	}
+})

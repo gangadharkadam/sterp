@@ -71,10 +71,7 @@ class SupportTicket(TransactionBase):
 			first_name = frappe.db.sql_list("""select first_name from `tabUser` where name='%s'"""%(self.raised_by))
 			frappe.errprint(first_name[0])
 
-			msg="Dear  "+first_name[0]+"!<br><br>Support Ticket is created successfully <br><br>Your Support Ticket Number is '"+self.name+"' <br><br>Please note for further information. <br><br>Regards, <br>Team TailorPad."
-
-
-		
+			msg="Dear  "+first_name[0]+"!<br><br>Support Ticket is created successfully for '"+self.subject+"'<br><br>Your Support Ticket Number is '"+self.name+"' <br><br>Please note for further information. <br><br>Regards, <br>Team TailorPad."
 			sender = frappe.session.user not in STANDARD_USERS and frappe.session.user or None
 			frappe.sendmail(recipients=self.raised_by, sender=sender, subject=self.subject,
 				message=msg)
@@ -123,7 +120,7 @@ class SupportTicket(TransactionBase):
 		frappe.errprint(response.text)
 
 	def validate(self):
-		self.send_email()
+		
 		self.update_status()
 		self.set_lead_contact(self.raised_by)
 
@@ -131,6 +128,7 @@ class SupportTicket(TransactionBase):
 			from frappe.widgets.form.assign_to import clear
 			clear(self.doctype, self.name)
 		#self.on_update1()
+		self.send_email()
 
 	def set_lead_contact(self, email_id):
 		import email.utils
@@ -162,8 +160,21 @@ def set_status(name, status):
 	st.save()
 
 @frappe.whitelist()
+def get_admin(name):
+	admin = frappe.db.sql("select email_id_admin from tabUser  where name='administrator'")
+	frappe.errprint(admin)
+	frappe.errprint(frappe.session.get('user'))
+	if admin:
+		frappe.errprint("if")
+		return admin[0][0]
+	else:
+		frappe.errprint("else")
+	  	return frappe.session.get('user')
+
+
+@frappe.whitelist()
 def assing_future(name, assign_in_future,raised_by,assign_to):
-  	frappe.errprint("in assign")
+  	frappe.errprint("in assign future")
   	from frappe.utils import get_url, cstr
 	if get_url()=='http://smarttailor':
 		check_entry = frappe.db.sql("""select assign_to from `tabAssing Master` where name = %s """, raised_by)
@@ -194,15 +205,17 @@ def auto_close_tickets():
 		and date_sub(curdate(),interval 15 Day) > modified""")
 
 
-
-
 @frappe.whitelist()
 def reenable(name):
-  	frappe.errprint("in reenable")
-  	from frappe.utils import get_url, cstr,add_months
-  	from frappe import msgprint, throw, _
-  	res = frappe.db.sql("select validity from `tabUser` where name='Administrator' and no_of_users >0")
-	if  res:
+	frappe.errprint("calling superadmin")
+        from frappe.utils import get_url, cstr
+	frappe.errprint(get_url())
+	if get_url()!='http://smarttailor':
+	  frappe.errprint("in reenable")
+  	  from frappe.utils import get_url, cstr,add_months
+  	  from frappe import msgprint, throw, _
+  	  res = frappe.db.sql("select validity from `tabUser` where name='Administrator' and no_of_users >0")
+	  if  res:
 		res1 = frappe.db.sql("select validity_end_date from `tabUser` where '"+cstr(name)+"' and validity_end_date <CURDATE()")
 		if res1:
 			bc="update `tabUser` set validity_end_date=DATE_ADD((nowdate(), INTERVAL "+cstr(res[0][0])+" MONTH) where name = '"+cstr(name)+"'"
@@ -213,8 +226,8 @@ def reenable(name):
 			frappe.errprint(ab)
 			frappe.db.sql(ab)
 	  		frappe.db.sql("update `tabUser`set no_of_users=no_of_users-1  where name='Administrator'")
-	else:
-		frappe.throw(_("Your subscription plan expired .Please purchase an subscription plan and enable user."))
+	  else:
+		    frappe.throw(_("Your subscription plan expired .Please purchase an subscription plan and enable user."))
 
 
 

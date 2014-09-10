@@ -51,11 +51,7 @@ def get_data():
 					"name": "Site Master",
 					"description": _("Customer Site Master."),
 				},
-				{
-					"type": "doctype",
-					"name": "Admin Details",
-					"description": _("Enable /Disable Admin site notifications."),
-				},
+				
 			]
 		},
 		{
@@ -206,22 +202,7 @@ def get_data():
 					"doctype": "Customer",
 					"icon": "icon-bar-chart",
 				},
-
-				{
-					"type": "report",
-					"is_query_report": True,
-					"name": "Subscription Details",
-					"doctype": "Site Master",
-					"icon": "icon-bar-chart",
-				},
-
-				{
-					"type": "report",
-					"is_query_report": True,
-					"name": "Subscription Renewal Due",
-					"doctype": "Site Master",
-					"icon": "icon-bar-chart",
-				},
+				
 			]
 		},
 		{
@@ -302,6 +283,7 @@ def get_data():
 					"name": "Pending SO Items For Purchase Request",
 					"doctype": "Sales Order"
 				},
+
 			]
 		},
 	]
