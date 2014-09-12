@@ -53,7 +53,7 @@ def get_leads():
 		SalesMailbox()
 
 def assign_support():
-	frappe.errprint("assign suppoert tickets")
+	#frappe.errprint("assign suppoert tickets")
 	from frappe.utils import get_url, cstr
 	if get_url()=='http://smarttailor':
 		check_entry = frappe.db.sql("""select name,raised_by from `tabSupport Ticket` where assign_to is null and raised_by is not null and status<>'Closed'""")

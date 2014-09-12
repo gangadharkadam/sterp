@@ -276,7 +276,7 @@ def update_users(doc, method):
 				frappe.errprint("updated")
 
 def create_support():
-	frappe.errprint("creating suppoert tickets")
+	#frappe.errprint("creating suppoert tickets")
 	import requests
 	import json
 	pr2 = frappe.db.sql("""select site_name from `tabSubAdmin Info` """)
@@ -284,7 +284,7 @@ def create_support():
 		db_name=cstr(site_name[0]).split('.')[0]
 		db_name=db_name[:16]
 		abx="select name from `"+cstr(db_name)+"`.`tabSupport Ticket` where flag='false'"
-		frappe.errprint(abx)
+		#frappe.errprint(abx)
 		pr3 = frappe.db.sql(abx)
 		for sn in pr3:
 		 		login_details = {'usr': 'Administrator', 'pwd': 'admin'}
@@ -305,11 +305,11 @@ def create_support():
 				url="http://"+cstr(site_name[0])+"/api/resource/Support Ticket/"+cstr(sn[0])
 				support_ticket={}
 				support_ticket['flag']='True'
-				frappe.errprint('data='+json.dumps(support_ticket))
+				#frappe.errprint('data='+json.dumps(support_ticket))
 				response = requests.put(url, data='data='+json.dumps(support_ticket), headers=headers)
 
 def create_feedback():
-	frappe.errprint("creating feed back")
+	#frappe.errprint("creating feed back")
 	import requests
 	import json
 	pr2 = frappe.db.sql("""select site_name from `tabSubAdmin Info`""")
@@ -340,7 +340,7 @@ def create_feedback():
 				response = requests.put(url, data='data='+json.dumps(support_ticket), headers=headers)
 
 def add_validity():
-		frappe.errprint("in add validity function")
+		#frappe.errprint("in add validity function")
 		import requests
 		import json
 		from frappe.utils import nowdate, cstr,cint, flt, now, getdate, add_months
@@ -380,7 +380,7 @@ def add_validity():
 				response = requests.put(url, data='data='+json.dumps(vldt), headers=headers)		
 
 def disable_user():
-	frappe.errprint("in disable user ")
+	#frappe.errprint("in disable user ")
 	import requests
 	import json
 	pr2 = frappe.db.sql("""select site_name from `tabSubAdmin Info`""")
